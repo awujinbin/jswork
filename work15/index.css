@@ -89,12 +89,16 @@
 }
 
 .cart-del,
-.cart-all {
+.cart-all,
+.cart-unall,
+.cart-agcheck {
     color: #3366D4;
 }
 
 .cart-del:hover,
-.cart-all:hover {
+.cart-all:hover,
+.cart-unall:hover,
+.cart-agcheck:hover {
     text-decoration: underline;
     cursor: pointer
 }
@@ -104,7 +108,7 @@
     text-align: right
 }
 
-.cart-bottom .cart-all {
+.cart-bottom .cart-all，.cart-unall,.cart-agcheck {
     position: relative;
     top: 1px
 }
