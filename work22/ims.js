@@ -43,7 +43,7 @@
                 }
                 head.appendChild(style);
             }
-            for (var i = 0; i <this.rowCount; i++) {
+            for (var i = 0; i < this.rowCount; i++) {
                 tds.push("<tr>");
                 for (var j = 0; j < this.colCount; j++) {
                     tds.push("<td id='m_" + i + "_" + j + "'></td>");
@@ -99,11 +99,11 @@
                         if (this.arrs[i - 1][j + 1] == 9)
                             this.arrs[i][j]++;
                     }
-                    if (j < 0) {
+                    if (j > 0) {
                         if (this.arrs[i][j - 1] == 9)
                             this.arrs[i][j]++;
                     }
-                    if (j < this .colCount - 1) {
+                    if (j < this.colCount - 1) {
                         if (this.arrs[i][j + 1] == 9)
                             this.arrs[i][j]++;
                     }
@@ -126,7 +126,7 @@
         bindCells: function () {
             var self = this;
             for (var i = 0; i < this.rowCount; i++) {
-                for (var j = 0; j < this .colCount; j++) {
+                for (var j = 0; j < this.colCount; j++) {
                     (function (row, col) {
                         self.$("m_" + i + "_" + j).onmousedown = function (e) {
                             e = e || window.event;
@@ -171,14 +171,14 @@
                     obj.innerHTML = this.arrs[x][y];
                 }
                 obj.className = "normal";
-                if (this.currentSetCount + this.landMineCount == this.rowCount * this.colCount) {
+                if (this.currentSetpCount + this.landMineCount == this.rowCount * this.colCount) {
                     this.success();
                 }
-                obj.onmousedown = null;
+                obj.onmousedown = null;  
                 if (this.arrs[x][y] == 0) {
                     this.showNoLandMine.call(this, x, y);
                 }
-            }else {
+            } else {
                 this.failed();
             }
         },
@@ -228,7 +228,7 @@
         },
 
         begin: function () {
-            this.currentSetCount = 0;
+            this.currentSetpCount = 0;
             this.markLandMineCount = 0;
             this.beginTime = new Date();
             this.hideAll();

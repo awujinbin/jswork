@@ -22,7 +22,7 @@ window.onload = function () {
                     if (!confirm("确定结束当前游戏？"))
                         return false;
             var value = this.value;
-            init(value, value, value * value / 5 - value, value *value / 5);
+            init(value, value, value * value / 5 - value, value * value / 5);
             document.getElementById("JMS_main").style.width = value * 40 + 180 + 60 + "px";
         }
     }
@@ -46,7 +46,7 @@ function init(rowCount, colCount, minLandMineCount, maxLandMineCount) {
         if(status){
             let name = document.getElementById('name').innerText
             let score = document.getElementById('costTime').innerText
-            xmlhttp.open('post', 'https://139.9.81.203:8090/gameRecord/mine',true)
+            xmlhttp.open('post', 'http://139.9.81.203:8090/gameRecord/mine',true)
             xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
             xmlhttp.send('name=' +name + '&score=' + score+"&order=1")
         }else{
