@@ -46,7 +46,7 @@ function init(rowCount, colCount, minLandMineCount, maxLandMineCount) {
         if(status){
             let name = document.getElementById('name').innerText
             let score = document.getElementById('costTime').innerText
-            xmlhttp.open('post', 'http://139.9.81.203:8090/gameRecord/mine',true)
+            xmlhttp.open('post', 'http://139.9.81.203:8090/gameRecord/mine',true)   //成绩提交服务器
             xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
             xmlhttp.send('name=' +name + '&score=' + score+"&order=1")
         }else{
@@ -60,15 +60,15 @@ function init(rowCount, colCount, minLandMineCount, maxLandMineCount) {
 
     //为“开始游戏”按钮绑定事件
     beginButton.onclick = function () {
-        jms.play();
-
+        jms.play();//初始化
+        //显示地雷个数
         landMineCountElement.innerHTML = jms.landMineCount;
 
-
+        //开始
         jms.begin();
         this.disabled="disable"
 
-
+        //更新花费时间
         timeHandle = setInterval(function () {
             timeShow.innerHTML = parseInt((new Date() - jms.beginTime) / 1000);
         }, 1000);

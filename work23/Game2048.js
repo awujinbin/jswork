@@ -57,17 +57,17 @@
         $('#' + prefix + '_restart').click(start);
         start();
     };
-
+    //数据处理
     function Board(len) {
         this.len = len;
         this.arr = [];
     }
     Board.prototype = {
-
+        //事件
         onGenerate: function() {},
         onMove: function () {},
         onMoveComplete: function() {},
-
+        //创建数组
         init: function() {
             for (var arr = [], x = 0, len = this.len; x < len; ++x) {
                 arr[x] = [];
@@ -77,7 +77,7 @@
             }
             this.arr = arr;
         },
-
+        //在随机位置增加一个随机数
         generate: function() {
             var empty = [];
             for (var x = 0, arr = this.arr, len = arr.length; x < len; ++x) {
@@ -94,26 +94,26 @@
             this.arr[pos.x][pos.y] = Math.random() < 0.5 ? 2 : 4;
             this.onGenerate({x: pos.x, y: pos.y, num: this.arr[pos.x][pos.y]});
         },
-
+        //左移
         moveLeft: function() {
                 var canMove = false;
-
+                //从上到下，从左到右
                 for (var x = 0, len = this.arr.length; x < len; ++x) {
                     for (var y = 0, arr = this.arr[x]; y < len; ++y) {
-
+                         //从y + 1 位置开始，向右查找
                         for (var next = y + 1; next < len; ++next) {
-
+                            //如果next 单元格是 0， 找下一个不是 0 的单元格
                             if (arr[next] === 0) {
                                 continue;
                             }
-
+                             //如果 y 数字是 0，则将 next 移动到 y 位置， 然后将 y 减 1 重新查找
                             if (arr[y] === 0) {
                                 arr[y] = arr[next];
                                 this.onMove({from: {x: x, y: next, num: arr[next]}, to: {x: x, y: y, num: arr[y]}});
                                 arr[next] = 0;
                                 canMove = true;
                                 --y;
-
+                              //如果 y 与 next 单元格数字相等，则将 next 移动并合并给y
                             } else if (arr[y] === arr[next]) {
                                 arr[y] += arr[next];
                                 this.onMove({from: {x: x, y: next, num: arr[next]}, to: {x: x, y: y, num: arr[y]}});
@@ -219,7 +219,7 @@
             }
             return false;
         },
-        ranklist:function(url,user,score,view) {
+        ranklist:function(url,user,score,view) {  //提交排名成绩
             console.log(url)
             console.log(user)
             console.log(score)
@@ -230,12 +230,12 @@
             })
         }
     };
-
+    //视图处理
     function View(prefix, len, size, margin) {
         this.prefix = prefix;
-        this.len = len;
-        this.size = size;
-        this.margin = margin;
+        this.len = len;                //单元格单边的数量 （实际数量 len * len）
+        this.size = size;             //每个单元格的边长
+        this.margin = margin;         //每个单元格的间距
         this.score = $('#' + prefix + '_score');
         this.container = $('#' + prefix + '_container');
         var containerSize = len * size + margin * (len + 1);
@@ -243,7 +243,7 @@
         this.nums = {}; 
     }
     View.prototype = {
-
+        //计算位置
         getPos: function(n) {
             return this.margin + n *  (this.size + this.margin);
         },

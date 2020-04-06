@@ -3,31 +3,32 @@
         if (!(this instanceof JMS))
             return new JMS(id, rowCount, colCount, minLandMineCount, maxLandMineCount);
         this.doc = document;
-        this.table = this.doc.getElementById(id);
-        this.cells = this.table.getElementsByTagName("td");
-        this.rowCount = rowCount || 10;
-        this.colCount = colCount || 10;
-        this.landMineCount = 0;
-        this.markLandMineCount = 0;
-        this.minLandMineCount = minLandMineCount || 10;
-        this.maxLandMineCount = maxLandMineCount || 20;
-        this.arrs = [];
-        this.beginTime = null;
-        this.endTime = null;
-        this.currentSetpCount = 0;
-        this.endCallBack = null;
-        this.landMineCallBack = null;
-        this.doc.oncontextmenu = function () {
+        this.table = this.doc.getElementById(id); //画格子的表格
+        this.cells = this.table.getElementsByTagName("td");  //小格子
+        this.rowCount = rowCount || 10;//格子行数
+        this.colCount = colCount || 10;//格子列数
+        this.landMineCount = 0;//地雷个数
+        this.markLandMineCount = 0;//标记的地雷个数
+        this.minLandMineCount = minLandMineCount || 10;//地雷最少个数
+        this.maxLandMineCount = maxLandMineCount || 20;//地雷最多个数
+        this.arrs = [];//格子对应的数组
+        this.beginTime = null;//游戏开始时间
+        this.endTime = null;//游戏结束时间
+        this.currentSetpCount = 0;//当前走的步数
+        this.endCallBack = null;//游戏结束时的回调函数
+        this.landMineCallBack = null;//标记为地雷时更新剩余地雷个数的回调函数
+        this.doc.oncontextmenu = function () {//禁用右键菜单
             return false;
         };
         this.drawMap();
     };
 
     JMS.prototype = {
-
+        //获取元素
         $: function (id) {
             return this.doc.getElementById(id);
         },
+        //画地图
 
         drawMap: function () {
             var tds = [];
@@ -66,7 +67,7 @@
             this.endTime = null;
             this.currentSetpCount = 0;
         },
-
+        //把是地雷的数组项的值设置为9
         landMine: function () {
             var allCount = this.rowCount * this.colCount - 1,
                 tempArr = {};
@@ -81,7 +82,7 @@
                 tempArr[randomNum] = randomNum;
             }
         },
-
+        //计算其他格子中的数字
         calculateNoLandMineCount: function () {
             for (var i = 0; i < this.rowCount; i++) {
                 for (var j = 0; j < this.colCount; j++) {
@@ -122,7 +123,7 @@
                 }
             }
         },
-
+        //给每个格子绑定点击事件 （左键和右键）
         bindCells: function () {
             var self = this;
             for (var i = 0; i < this.rowCount; i++) {
@@ -151,7 +152,7 @@
                 }
             }
         },
-
+        //展开无雷区域
         showNoLandMine: function (x, y) {
             for (var i = x - 1; i < x + 2; i++)
                 for (var j = y - 1; j < y + 2; j++) {
@@ -163,7 +164,7 @@
                     }
                 }
         },
-
+        //显示
         openBlock: function (obj, x, y) {
             if (this.arrs[x][y] != 9) {
                 this.currentSetpCount++;
@@ -182,7 +183,7 @@
                 this.failed();
             }
         },
-
+        //显示地雷
         showLandMine: function () {
             for (var i = 0; i < this.rowCount; i++) {
                 for (var j = 0; j < this.colCount; j++) {
@@ -192,7 +193,7 @@
                 }
             }
         },
-
+       //显示所有格子信息
         showAll: function () {
             for (var i = 0; i < this.rowCount; i++) {
                 for (var j = 0; j < this.colCount; j++) {
@@ -207,7 +208,7 @@
                 }
             }
         },
-
+       //清楚显示的格子信息
         hideAll: function () {
             for (var i = 0; i < this.rowCount; i++) {
                 for (var j = 0; j < this.colCount; j++) {
@@ -217,7 +218,7 @@
                 }
             }
         },
-
+         //删除格子绑定的事件
         disableAll: function () {
             for (var i = 0; i < this.rowCount; i++) {
                 for (var j = 0; j < this.colCount; j++) {
@@ -226,46 +227,46 @@
                 }
             }
         },
-
+        //游戏开始
         begin: function () {
-            this.currentSetpCount = 0;
+            this.currentSetpCount = 0;  //开始的步数清零
             this.markLandMineCount = 0;
-            this.beginTime = new Date();
+            this.beginTime = new Date();  //游戏开始时间
             this.hideAll();
             this.bindCells();
         },
-
+         //游戏结束
         end: function (status) {
-            this.endTime = new Date();
-            if (this.endCallBack) {
+            this.endTime = new Date();  //游戏结束时间
+            if (this.endCallBack) {  //如果有回调函数则调用
                 this.endCallBack(status);
             }
         },
-
+        //游戏成功
         success: function () {
             this.end(true);
             this.showAll();
             this.disableAll();
         },
-
+        //游戏失败
         failed: function () {
             this.end(false);
             this.showAll();
             this.disableAll();
         },
-
+        //通数值找到行数和列数
         getRowCol: function (val) {
             return {
                 row: parseInt(val / this.colCount),
                 col: val % this.colCount
             };
         },
-
+        //获取一个随机数
         selectFrom: function (iFirstValue, iLastValue) {
             var iChoices = iLastValue - iFirstValue + 1;
             return Math.floor(Math.random() * iChoices + iFirstValue);
         },
-
+        //添加HTML到Table
         setTableInnerHTML: function (table, html) {
             if (navigator && navigator.userAgent.match(/msie/i)) {
                 var temp = table.ownerDocument.createElement('div');
@@ -279,7 +280,7 @@
                 table.innerHTML = html;
             }
         },
-
+        //入口函数
         play:function () {
             this.init();
             this.landMine();
